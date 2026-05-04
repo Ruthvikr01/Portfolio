@@ -61,9 +61,9 @@ export const projects = [
     stack: ["Python", "Flask", "NLP", "REST API"],
     repo: "https://github.com/Ruthvikr01/NSFW-Monitoring-Application",
     theme: "dark",
-    accent: "from-[#0b0b1f] via-[#1b1147] to-[#2d1b69]",
-    glowA: "rgba(139, 92, 246, 0.38)",
-    glowB: "rgba(34, 211, 238, 0.22)",
+    accent: "from-[#000000] via-[#0a0a0c] to-[#1d1d1f]",
+    glowA: "rgba(0, 113, 227, 0.16)",
+    glowB: "rgba(255, 255, 255, 0.05)",
     size: "large",
   },
   {
@@ -82,7 +82,7 @@ export const projects = [
     repo:
       "https://github.com/Ruthvikr01/InfoBridgePro--Database-Management-System",
     theme: "light",
-    accent: "from-[#fff7ed] via-[#ffedd5] to-[#fed7aa]",
+    accent: "from-[#fbfbfd] via-[#f5f5f7] to-[#ededef]",
     size: "medium",
   },
   {
@@ -100,7 +100,7 @@ export const projects = [
     stack: ["Python", "JavaScript", "D3.js", "Graph Algorithms"],
     repo: "https://github.com/Ruthvikr01/Route-Navigator",
     theme: "light",
-    accent: "from-[#ecfeff] via-[#cffafe] to-[#a5f3fc]",
+    accent: "from-[#ffffff] via-[#fafafa] to-[#efeff1]",
     size: "medium",
   },
   {
@@ -118,9 +118,9 @@ export const projects = [
     stack: ["Python", "Scikit-learn", "PyQt5"],
     repo: "https://github.com/Ruthvikr01/Malware-Detection",
     theme: "dark",
-    accent: "from-[#0a0a0a] via-[#1a1410] to-[#2a1810]",
-    glowA: "rgba(244, 114, 82, 0.28)",
-    glowB: "rgba(244, 63, 94, 0.18)",
+    accent: "from-[#1d1d1f] via-[#161617] to-[#0b0b0c]",
+    glowA: "rgba(255, 255, 255, 0.06)",
+    glowB: "rgba(0, 113, 227, 0.10)",
     size: "wide",
   },
 ];

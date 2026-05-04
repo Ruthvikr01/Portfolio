@@ -82,7 +82,7 @@ const ProjectCard = ({ project }) => {
       } group block transition-shadow ${
         hover
           ? isDark
-            ? "shadow-[0_20px_60px_rgba(76,29,149,0.35)]"
+            ? "shadow-[0_18px_50px_rgba(0,0,0,0.35)]"
             : "shadow-[0_18px_50px_rgba(0,0,0,0.08)]"
           : "shadow-[0_2px_8px_rgba(0,0,0,0.03)]"
       }`}
@@ -105,23 +105,16 @@ const ProjectCard = ({ project }) => {
         />
       )}
 
-      {/* Animated shimmer ring on hover for the featured card */}
+      {/* Animated subtle sheen on the featured card */}
       {isLarge && isDark && (
         <div
           aria-hidden
-          className={`absolute -inset-px rounded-3xl pointer-events-none transition-opacity duration-700 ${
-            hover ? "opacity-100" : "opacity-0"
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${
+            hover ? "opacity-100" : "opacity-60"
           }`}
           style={{
             background:
-              "conic-gradient(from 120deg at 50% 50%, rgba(168,85,247,0) 0deg, rgba(168,85,247,0.35) 80deg, rgba(34,211,238,0.35) 200deg, rgba(168,85,247,0) 360deg)",
-            mask:
-              "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-            WebkitMask:
-              "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-            WebkitMaskComposite: "xor",
-            maskComposite: "exclude",
-            padding: "1px",
+              "linear-gradient(135deg, transparent 38%, rgba(255,255,255,0.04) 50%, transparent 62%)",
           }}
         />
       )}
