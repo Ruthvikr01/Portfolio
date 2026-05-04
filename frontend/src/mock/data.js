@@ -46,20 +46,24 @@ export const experiences = [
 
 export const projects = [
   {
-    id: "route-navigator",
-    title: "Route Navigator",
-    period: "Dec 2025",
-    short: "Real-time graph-based route optimizer.",
+    id: "nsfw-moderation",
+    title: "NSFW Real-Time Moderation API",
+    period: "May 2024",
+    short: "Streaming chat content classifier.",
     description:
-      "A route optimization engine using Dijkstra's, Bellman-Ford, and MST algorithms — reducing simulated travel distance by up to 22% over baseline routes. Models environmental and logistical inputs (weather, distance, connectivity) and visualizes scenarios in real time with D3.js.",
+      "A Flask-based REST API for real-time toxic content detection with ~85% classification accuracy. NLP pipelines process high-volume streaming chat data, integrate with external chat systems, and reduce manual moderation workload by 50%.",
     highlights: [
-      "22% shorter simulated routes vs baseline",
-      "Interactive D3.js comparison view",
-      "Weather + connectivity-aware modeling",
+      "~85% classification accuracy",
+      "50% less manual moderation",
+      "Streaming integration ready",
+      "Production-grade REST API",
     ],
-    stack: ["Python", "JavaScript", "D3.js", "Graph Algorithms"],
-    repo: "https://github.com/Ruthvikr01/Route-Navigator",
-    accent: "from-zinc-900 via-zinc-800 to-zinc-900",
+    stack: ["Python", "Flask", "NLP", "REST API"],
+    repo: "https://github.com/Ruthvikr01/NSFW-Monitoring-Application",
+    theme: "dark",
+    accent: "from-[#0b0b1f] via-[#1b1147] to-[#2d1b69]",
+    glowA: "rgba(139, 92, 246, 0.38)",
+    glowB: "rgba(34, 211, 238, 0.22)",
     size: "large",
   },
   {
@@ -77,24 +81,26 @@ export const projects = [
     stack: ["PHP", "Docker", "PostgreSQL", "MySQL", "KNIME"],
     repo:
       "https://github.com/Ruthvikr01/InfoBridgePro--Database-Management-System",
-    accent: "from-blue-50 to-blue-100",
+    theme: "light",
+    accent: "from-[#fff7ed] via-[#ffedd5] to-[#fed7aa]",
     size: "medium",
   },
   {
-    id: "nsfw-moderation",
-    title: "NSFW Real-Time Moderation API",
-    period: "May 2024",
-    short: "Streaming chat content classifier.",
+    id: "route-navigator",
+    title: "Route Navigator",
+    period: "Dec 2025",
+    short: "Real-time graph-based route optimizer.",
     description:
-      "A Flask-based REST API for real-time toxic content detection — ~85% classification accuracy. NLP pipelines processed high-volume streaming chat data, reducing manual moderation workload by 50%.",
+      "Route optimization with Dijkstra's, Bellman-Ford, and MST algorithms — up to 22% shorter simulated routes. Interactive D3.js scenarios with weather + connectivity modeling.",
     highlights: [
-      "~85% classification accuracy",
-      "50% less manual moderation",
-      "Streaming integration ready",
+      "22% shorter simulated routes",
+      "D3.js comparison view",
+      "Weather-aware modeling",
     ],
-    stack: ["Python", "Flask", "NLP", "REST API"],
-    repo: "https://github.com/Ruthvikr01/NSFW-Monitoring-Application",
-    accent: "from-stone-100 to-stone-200",
+    stack: ["Python", "JavaScript", "D3.js", "Graph Algorithms"],
+    repo: "https://github.com/Ruthvikr01/Route-Navigator",
+    theme: "light",
+    accent: "from-[#ecfeff] via-[#cffafe] to-[#a5f3fc]",
     size: "medium",
   },
   {
@@ -103,7 +109,7 @@ export const projects = [
     period: "2023 — 2024",
     short: "Random Forest threat classifier with GUI.",
     description:
-      "A Random Forest classifier achieving over 90% detection accuracy on validation samples, paired with a PyQt5 monitoring GUI that accelerated file inspection time by 40% and improved real-time threat visibility.",
+      "A Random Forest classifier achieving >90% detection accuracy, paired with a PyQt5 monitoring GUI that accelerated file inspection by 40% and improved real-time threat visibility.",
     highlights: [
       ">90% detection accuracy",
       "40% faster inspection",
@@ -111,8 +117,11 @@ export const projects = [
     ],
     stack: ["Python", "Scikit-learn", "PyQt5"],
     repo: "https://github.com/Ruthvikr01/Malware-Detection",
-    accent: "from-neutral-900 to-neutral-700",
-    size: "large",
+    theme: "dark",
+    accent: "from-[#0a0a0a] via-[#1a1410] to-[#2a1810]",
+    glowA: "rgba(244, 114, 82, 0.28)",
+    glowB: "rgba(244, 63, 94, 0.18)",
+    size: "wide",
   },
 ];
 
