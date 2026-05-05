@@ -8,7 +8,6 @@ const links = [
   { label: "Work", href: "#work" },
   { label: "Skills", href: "#skills" },
   { label: "Education", href: "#education" },
-  { label: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
@@ -58,13 +57,6 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <a
-          href="#contact"
-          onClick={(e) => handleClick(e, "#contact")}
-          className="hidden md:inline-flex items-center text-[12px] font-medium text-white bg-[#1d1d1f] hover:bg-black px-3.5 py-1.5 rounded-full transition-colors"
-        >
-          Get in touch
-        </a>
         <button
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
@@ -87,15 +79,6 @@ const Navbar = () => {
                 </a>
               </li>
             ))}
-            <li>
-              <a
-                href="#contact"
-                onClick={(e) => handleClick(e, "#contact")}
-                className="inline-flex items-center text-[13px] font-medium text-white bg-[#1d1d1f] px-4 py-2 rounded-full"
-              >
-                Get in touch
-              </a>
-            </li>
           </ul>
         </div>
       )}

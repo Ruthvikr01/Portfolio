@@ -93,18 +93,6 @@ const Hero = () => {
               className="transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
             />
           </a>
-          <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              document
-                .querySelector("#contact")
-                ?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="inline-flex items-center gap-2 bg-white hover:bg-[#f5f5f7] text-[#1d1d1f] text-[14px] font-medium px-5 py-3 rounded-full border border-black/10 transition-colors"
-          >
-            Contact me
-          </a>
           <div className="ml-1 flex items-center gap-1">
             <SocialIcon
               href={profile.socials.github}
