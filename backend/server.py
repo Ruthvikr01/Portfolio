@@ -1,4 +1,6 @@
 from fastapi import FastAPI, APIRouter
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -13,6 +15,7 @@ from datetime import datetime, timezone
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+STATIC_DIR = ROOT_DIR / "static"
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -68,6 +71,23 @@ async def get_status_checks():
 
 # Include the router in the main app
 app.include_router(api_router)
+
+if STATIC_DIR.exists():
+    app.mount("/static", StaticFiles(directory=STATIC_DIR / "static"), name="static")
+
+    @app.get("/")
+    async def serve_root():
+        index_file = STATIC_DIR / "index.html"
+        if index_file.exists():
+            return FileResponse(index_file)
+        return {"detail": "Not Found"}
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        index_file = STATIC_DIR / "index.html"
+        if index_file.exists():
+            return FileResponse(index_file)
+        return {"detail": "Not Found"}
 
 app.add_middleware(
     CORSMiddleware,
