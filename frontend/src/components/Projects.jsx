@@ -116,7 +116,7 @@ const ProjectCard = ({ project }) => {
     >
       {/* Base color gradient */}
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${project.accent} transition-transform duration-700 ease-out ${
+        className={`absolute inset-0 pointer-events-none bg-gradient-to-br ${project.accent} transition-transform duration-700 ease-out ${
           hover ? "scale-[1.04]" : "scale-100"
         }`}
       />
@@ -125,7 +125,7 @@ const ProjectCard = ({ project }) => {
       {isDark && (
         <div
           aria-hidden
-          className={`absolute inset-0 transition-opacity duration-700 ${
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${
             hover ? "opacity-100" : "opacity-80"
           }`}
           style={glowStyle}
@@ -159,7 +159,7 @@ const ProjectCard = ({ project }) => {
       />
 
       <div
-        className={`relative h-full w-full p-6 sm:p-8 flex ${
+        className={`relative z-10 h-full w-full p-6 sm:p-8 flex ${
           isWide
             ? "flex-row items-center justify-between gap-8"
             : "flex-col justify-between"
