@@ -40,7 +40,7 @@ const Projects = () => {
           </Reveal>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 auto-rows-[260px] gap-5">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 auto-rows-auto md:auto-rows-[260px] gap-5">
           {projects.map((p, i) => (
             <Reveal key={p.id} delay={120 + i * 80} className={sizeMap[p.size]}>
               <ProjectCard project={p} />
@@ -104,7 +104,7 @@ const ProjectCard = ({ project }) => {
       onKeyDown={isTouch ? undefined : onCardKey}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`relative h-full w-full rounded-3xl overflow-hidden border outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]/50 ${
+      className={`relative w-full min-h-[320px] md:h-full rounded-3xl overflow-hidden border outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]/50 ${
         isDark ? "border-white/10" : "border-black/5"
       } group block transition-shadow ${
         hover
