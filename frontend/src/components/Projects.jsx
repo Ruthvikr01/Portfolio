@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Reveal from "./Reveal";
-import { ArrowUpRight, Github } from "lucide-react";
+import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
 import { projects } from "../mock/data";
 
 const sizeMap = {
@@ -58,7 +58,6 @@ const ProjectCard = ({ project }) => {
   const isLarge = project.size === "large";
   const isWide = project.size === "wide";
 
-  // Build dual-radial glow background for dark cards
   const glowStyle =
     isDark && (project.glowA || project.glowB)
       ? {
@@ -70,14 +69,26 @@ const ProjectCard = ({ project }) => {
         }
       : {};
 
+  // Open the repo when clicking anywhere on the card (except inner links)
+  const onCardClick = () => {
+    window.open(project.repo, "_blank", "noopener,noreferrer");
+  };
+  const onCardKey = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onCardClick();
+    }
+  };
+
   return (
-    <a
-      href={project.repo}
-      target="_blank"
-      rel="noreferrer noopener"
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={onCardClick}
+      onKeyDown={onCardKey}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`relative h-full w-full rounded-3xl overflow-hidden border ${
+      className={`relative h-full w-full rounded-3xl overflow-hidden border cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]/50 ${
         isDark ? "border-white/10" : "border-black/5"
       } group block transition-shadow ${
         hover
@@ -105,7 +116,7 @@ const ProjectCard = ({ project }) => {
         />
       )}
 
-      {/* Animated subtle sheen on the featured card */}
+      {/* Subtle Apple-style sheen on the featured card */}
       {isLarge && isDark && (
         <div
           aria-hidden
@@ -114,7 +125,7 @@ const ProjectCard = ({ project }) => {
           }`}
           style={{
             background:
-              "linear-gradient(135deg, transparent 38%, rgba(255,255,255,0.04) 50%, transparent 62%)",
+              "linear-gradient(135deg, transparent 38%, rgba(255,255,255,0.05) 50%, transparent 62%)",
           }}
         />
       )}
@@ -133,19 +144,24 @@ const ProjectCard = ({ project }) => {
 
       <div
         className={`relative h-full w-full p-6 sm:p-8 flex ${
-          isWide ? "flex-row items-center justify-between gap-8" : "flex-col justify-between"
+          isWide
+            ? "flex-row items-center justify-between gap-8"
+            : "flex-col justify-between"
         } ${isDark ? "text-white" : "text-[#1d1d1f]"}`}
       >
-        {/* Header row */}
+        {/* Header row (non-wide) */}
         {!isWide && (
           <div className="flex items-start justify-between gap-4">
-            <span
-              className={`text-[11px] uppercase tracking-[0.18em] ${
-                isDark ? "text-white/65" : "text-[#1d1d1f]/55"
-              }`}
-            >
-              {project.period}
-            </span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span
+                className={`text-[11px] uppercase tracking-[0.18em] ${
+                  isDark ? "text-white/65" : "text-[#1d1d1f]/55"
+                }`}
+              >
+                {project.period}
+              </span>
+              {project.isLive && <LivePill isDark={isDark} />}
+            </div>
             <span
               className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform ${
                 hover ? "-translate-y-0.5 translate-x-0.5" : ""
@@ -163,13 +179,16 @@ const ProjectCard = ({ project }) => {
         {/* Body */}
         <div className={isWide ? "flex-1 min-w-0" : ""}>
           {isWide && (
-            <span
-              className={`text-[11px] uppercase tracking-[0.18em] mb-3 inline-block ${
-                isDark ? "text-white/65" : "text-[#1d1d1f]/55"
-              }`}
-            >
-              {project.period}
-            </span>
+            <div className="mb-3 flex items-center gap-2 flex-wrap">
+              <span
+                className={`text-[11px] uppercase tracking-[0.18em] ${
+                  isDark ? "text-white/65" : "text-[#1d1d1f]/55"
+                }`}
+              >
+                {project.period}
+              </span>
+              {project.isLive && <LivePill isDark={isDark} />}
+            </div>
           )}
           <h3
             className={`font-semibold tracking-[-0.02em] leading-[1.05] ${
@@ -207,7 +226,9 @@ const ProjectCard = ({ project }) => {
             </ul>
           )}
 
-          <div className={`${isLarge ? "mt-5" : "mt-4"} flex flex-wrap items-center gap-2`}>
+          <div
+            className={`${isLarge ? "mt-5" : "mt-4"} flex flex-wrap items-center gap-2`}
+          >
             {project.stack.slice(0, 5).map((s) => (
               <span
                 key={s}
@@ -220,13 +241,27 @@ const ProjectCard = ({ project }) => {
                 {s}
               </span>
             ))}
-            <span
-              className={`ml-1 inline-flex items-center gap-1 text-[11px] ${
-                isDark ? "text-white/55" : "text-[#1d1d1f]/50"
-              }`}
-            >
-              <Github size={11} /> Repo
-            </span>
+          </div>
+
+          {/* Action row: Repo + Live demo */}
+          <div
+            className={`${isLarge ? "mt-5" : "mt-3"} flex flex-wrap items-center gap-2`}
+          >
+            <CardLink
+              href={project.repo}
+              isDark={isDark}
+              icon={<Github size={12} />}
+              label="Repo"
+            />
+            {project.liveUrl && (
+              <CardLink
+                href={project.liveUrl}
+                isDark={isDark}
+                icon={<ExternalLink size={12} />}
+                label="Live demo"
+                primary
+              />
+            )}
           </div>
         </div>
 
@@ -245,8 +280,44 @@ const ProjectCard = ({ project }) => {
           </span>
         )}
       </div>
-    </a>
+    </div>
   );
 };
+
+const LivePill = ({ isDark }) => (
+  <span
+    className={`inline-flex items-center gap-1.5 text-[10px] font-medium tracking-wide uppercase px-2 py-0.5 rounded-full ${
+      isDark
+        ? "bg-emerald-400/15 text-emerald-300 border border-emerald-300/25"
+        : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+    }`}
+  >
+    <span className="relative inline-flex w-1.5 h-1.5">
+      <span className="absolute inline-flex w-full h-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
+      <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-emerald-400" />
+    </span>
+    Live
+  </span>
+);
+
+const CardLink = ({ href, icon, label, isDark, primary }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noreferrer noopener"
+    onClick={(e) => e.stopPropagation()}
+    className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full transition-colors ${
+      primary
+        ? isDark
+          ? "bg-white text-[#1d1d1f] hover:bg-white/90"
+          : "bg-[#1d1d1f] text-white hover:bg-black"
+        : isDark
+        ? "bg-white/10 text-white/85 border border-white/15 hover:bg-white/15"
+        : "bg-white text-[#1d1d1f]/80 border border-black/10 hover:border-black/20"
+    }`}
+  >
+    {icon} {label}
+  </a>
+);
 
 export default Projects;
