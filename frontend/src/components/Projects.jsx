@@ -193,7 +193,9 @@ const ProjectCard = ({ project }) => {
         )}
 
         {/* Body */}
-        <div className={isWide ? "flex-1 min-w-0" : ""}>
+        <div
+          className={`${isWide ? "flex-1 min-w-0" : ""} flex flex-col min-h-0`}
+        >
           {isWide && (
             <div className="mb-3 flex items-center gap-2 flex-wrap">
               <span
@@ -218,7 +220,7 @@ const ProjectCard = ({ project }) => {
             {project.title}
           </h3>
           <div
-            className={`mt-2 pr-1 max-h-[140px] sm:max-h-none overflow-y-auto ${
+            className={`mt-2 pr-1 max-h-[110px] sm:max-h-none overflow-y-auto ${
               isLarge ? "max-w-md" : isWide ? "max-w-xl" : "max-w-xs"
             }`}
           >
@@ -267,7 +269,7 @@ const ProjectCard = ({ project }) => {
 
           {/* Action row: Repo + Live demo */}
           <div
-            className={`${isLarge ? "mt-5" : "mt-3"} flex flex-wrap items-center gap-2`}
+            className={`mt-auto ${isLarge ? "pt-5" : "pt-3"} flex flex-wrap items-center gap-2`}
           >
             <CardLink
               href={project.repo}
