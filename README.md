@@ -18,6 +18,15 @@ Create the following variables in your environment or Render dashboard:
 - DB_NAME
 - CORS_ORIGINS (optional, comma-separated, default: "*")
 
+Contact form email forwarding (required for contact submissions):
+- SMTP_HOST
+- SMTP_PORT (default: 587)
+- SMTP_USER
+- SMTP_PASS
+- SMTP_FROM (optional, defaults to SMTP_USER)
+- SMTP_TO (destination inbox)
+- SMTP_TLS (optional, default: true)
+
 ## Local Development
 ### Backend
 ```bash

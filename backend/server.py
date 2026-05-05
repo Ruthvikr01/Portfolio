@@ -1,12 +1,14 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import smtplib
 import logging
 from pathlib import Path
+from email.message import EmailMessage
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List
 import uuid
@@ -56,6 +58,42 @@ class ContactMessageCreate(BaseModel):
     email: EmailStr
     message: str
 
+
+def send_contact_email(message: ContactMessage) -> None:
+    smtp_host = os.environ.get("SMTP_HOST")
+    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
+    smtp_user = os.environ.get("SMTP_USER")
+    smtp_pass = os.environ.get("SMTP_PASS")
+    smtp_from = os.environ.get("SMTP_FROM") or smtp_user
+    smtp_to = os.environ.get("SMTP_TO")
+    smtp_tls = os.environ.get("SMTP_TLS", "true").lower() == "true"
+
+    if not smtp_host or not smtp_user or not smtp_pass or not smtp_from or not smtp_to:
+        raise RuntimeError("SMTP configuration is incomplete")
+
+    email = EmailMessage()
+    email["Subject"] = f"New contact message from {message.name}"
+    email["From"] = smtp_from
+    email["To"] = smtp_to
+    email["Reply-To"] = message.email
+    email.set_content(
+        "\n".join(
+            [
+                f"Name: {message.name}",
+                f"Email: {message.email}",
+                f"Timestamp: {message.timestamp.isoformat()}",
+                "",
+                message.message,
+            ]
+        )
+    )
+
+    with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+        if smtp_tls:
+            server.starttls()
+        server.login(smtp_user, smtp_pass)
+        server.send_message(email)
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
@@ -95,6 +133,13 @@ async def create_contact_message(input: ContactMessageCreate):
     doc["timestamp"] = doc["timestamp"].isoformat()
 
     _ = await db.contact_messages.insert_one(doc)
+
+    try:
+        send_contact_email(message_obj)
+    except Exception as exc:
+        logger.exception("Failed to send contact email")
+        raise HTTPException(status_code=502, detail="Email delivery failed") from exc
+
     return message_obj
 
 # Include the router in the main app
