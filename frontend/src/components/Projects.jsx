@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Reveal from "./Reveal";
 import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
 import { projects } from "../mock/data";
@@ -54,6 +54,7 @@ const Projects = () => {
 
 const ProjectCard = ({ project }) => {
   const [hover, setHover] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
   const isDark = project.theme === "dark";
   const isLarge = project.size === "large";
   const isWide = project.size === "wide";
@@ -69,11 +70,26 @@ const ProjectCard = ({ project }) => {
         }
       : {};
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia("(pointer: coarse)");
+    const update = () => setIsTouch(media.matches);
+    update();
+    if (media.addEventListener) {
+      media.addEventListener("change", update);
+      return () => media.removeEventListener("change", update);
+    }
+    media.addListener(update);
+    return () => media.removeListener(update);
+  }, []);
+
   // Open the repo when clicking anywhere on the card (except inner links)
   const onCardClick = () => {
+    if (isTouch) return;
     window.open(project.repo, "_blank", "noopener,noreferrer");
   };
   const onCardKey = (e) => {
+    if (isTouch) return;
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       onCardClick();
@@ -82,13 +98,13 @@ const ProjectCard = ({ project }) => {
 
   return (
     <div
-      role="link"
-      tabIndex={0}
-      onClick={onCardClick}
-      onKeyDown={onCardKey}
+      role={isTouch ? undefined : "link"}
+      tabIndex={isTouch ? undefined : 0}
+      onClick={isTouch ? undefined : onCardClick}
+      onKeyDown={isTouch ? undefined : onCardKey}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`relative h-full w-full rounded-3xl overflow-hidden border cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]/50 ${
+      className={`relative h-full w-full rounded-3xl overflow-hidden border outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]/50 ${
         isDark ? "border-white/10" : "border-black/5"
       } group block transition-shadow ${
         hover
@@ -96,7 +112,7 @@ const ProjectCard = ({ project }) => {
             ? "shadow-[0_18px_50px_rgba(0,0,0,0.35)]"
             : "shadow-[0_18px_50px_rgba(0,0,0,0.08)]"
           : "shadow-[0_2px_8px_rgba(0,0,0,0.03)]"
-      }`}
+      } ${isTouch ? "cursor-default" : "cursor-pointer"}`}
     >
       {/* Base color gradient */}
       <div
