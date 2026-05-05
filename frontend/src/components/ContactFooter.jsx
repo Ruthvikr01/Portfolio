@@ -20,10 +20,11 @@ const ContactFooter = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const apiBase = (process.env.REACT_APP_BACKEND_URL || "").replace(/\/$/, "");
 
   const onChange = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
       toast({
@@ -33,18 +34,19 @@ const ContactFooter = () => {
       return;
     }
     setSubmitting(true);
-    // Mock send (frontend-only). Persist locally so the user sees it worked.
-    setTimeout(() => {
-      try {
-        const prev = JSON.parse(
-          localStorage.getItem("portfolio_messages") || "[]"
-        );
-        prev.push({ ...form, at: new Date().toISOString() });
-        localStorage.setItem("portfolio_messages", JSON.stringify(prev));
-      } catch (_) {
-        /* ignore */
+    try {
+      const response = await fetch(`${apiBase}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        throw new Error("Request failed");
       }
-      setSubmitting(false);
+
       setSent(true);
       toast({
         title: "Message sent",
@@ -52,7 +54,14 @@ const ContactFooter = () => {
       });
       setForm({ name: "", email: "", message: "" });
       setTimeout(() => setSent(false), 2400);
-    }, 700);
+    } catch (err) {
+      toast({
+        title: "Message failed",
+        description: "Please try again in a moment.",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -157,7 +166,7 @@ const ContactFooter = () => {
                 </div>
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                   <p className="text-[12px] text-[#1d1d1f]/50">
-                    Your message stays in your browser for now.
+                    Messages are sent to the backend and stored securely.
                   </p>
                   <button
                     type="submit"

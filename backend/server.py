@@ -7,7 +7,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List
 import uuid
 from datetime import datetime, timezone
@@ -40,6 +40,22 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+
+class ContactMessage(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    message: str
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class ContactMessageCreate(BaseModel):
+    name: str
+    email: EmailStr
+    message: str
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
@@ -68,6 +84,18 @@ async def get_status_checks():
             check['timestamp'] = datetime.fromisoformat(check['timestamp'])
     
     return status_checks
+
+
+@api_router.post("/contact", response_model=ContactMessage)
+async def create_contact_message(input: ContactMessageCreate):
+    message_dict = input.model_dump()
+    message_obj = ContactMessage(**message_dict)
+
+    doc = message_obj.model_dump()
+    doc["timestamp"] = doc["timestamp"].isoformat()
+
+    _ = await db.contact_messages.insert_one(doc)
+    return message_obj
 
 # Include the router in the main app
 app.include_router(api_router)
