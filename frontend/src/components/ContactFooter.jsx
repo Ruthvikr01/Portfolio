@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Reveal from "./Reveal";
 import {
   Mail,
@@ -10,59 +10,13 @@ import {
   Trophy,
   ArrowUpRight,
   Send,
-  CheckCircle2,
 } from "lucide-react";
-import { useToast } from "../hooks/use-toast";
 import { profile } from "../mock/data";
 
 const ContactFooter = () => {
-  const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [submitting, setSubmitting] = useState(false);
-  const [sent, setSent] = useState(false);
-  const apiBase = (process.env.REACT_APP_BACKEND_URL || "").replace(/\/$/, "");
-
-  const onChange = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
-      toast({
-        title: "Almost there",
-        description: "Please fill in all fields before sending.",
-      });
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const response = await fetch(`${apiBase}/api/contact`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-
-      setSent(true);
-      toast({
-        title: "Message sent",
-        description: "Thanks — I'll get back to you soon.",
-      });
-      setForm({ name: "", email: "", message: "" });
-      setTimeout(() => setSent(false), 2400);
-    } catch (err) {
-      toast({
-        title: "Message failed",
-        description: "Please try again in a moment.",
-      });
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  const mailtoHref = `mailto:${profile.email}?subject=${encodeURIComponent(
+    "Portfolio inquiry"
+  )}`;
 
   return (
     <>
@@ -133,60 +87,21 @@ const ContactFooter = () => {
             </div>
 
             <Reveal delay={140} className="lg:col-span-3">
-              <form
-                onSubmit={onSubmit}
-                className="rounded-3xl bg-[#fbfbfd] border border-black/5 p-6 sm:p-8 space-y-5"
-              >
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <Field
-                    label="Name"
-                    value={form.name}
-                    onChange={onChange("name")}
-                    placeholder="Your name"
-                  />
-                  <Field
-                    label="Email"
-                    type="email"
-                    value={form.email}
-                    onChange={onChange("email")}
-                    placeholder="you@domain.com"
-                  />
-                </div>
-                <div>
-                  <label className="text-[12px] uppercase tracking-[0.14em] text-[#1d1d1f]/55 font-medium">
-                    Message
-                  </label>
-                  <textarea
-                    value={form.message}
-                    onChange={onChange("message")}
-                    rows={5}
-                    placeholder="Tell me about the role, project or idea…"
-                    className="mt-2 w-full resize-none rounded-2xl bg-white border border-black/10 px-4 py-3 text-[15px] text-[#1d1d1f] placeholder:text-[#1d1d1f]/35 focus:outline-none focus:border-[#0071e3]/40 focus:ring-4 focus:ring-[#0071e3]/10 transition-[border-color,box-shadow]"
-                  />
-                </div>
-                <div className="flex items-center justify-between gap-4 flex-wrap">
-                  <p className="text-[12px] text-[#1d1d1f]/50">
-                    Messages are sent to the backend and stored securely.
-                  </p>
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="inline-flex items-center gap-2 bg-[#1d1d1f] hover:bg-black disabled:opacity-60 text-white text-[14px] font-medium px-5 py-3 rounded-full transition-colors"
-                  >
-                    {sent ? (
-                      <>
-                        Sent <CheckCircle2 size={16} />
-                      </>
-                    ) : submitting ? (
-                      <>Sending…</>
-                    ) : (
-                      <>
-                        Send message <Send size={15} />
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
+              <div className="rounded-3xl bg-[#fbfbfd] border border-black/5 p-6 sm:p-8 space-y-4">
+                <p className="text-[15px] text-[#1d1d1f]/70">
+                  Prefer email? Click below and your mail app will open with a
+                  pre-filled subject.
+                </p>
+                <a
+                  href={mailtoHref}
+                  className="inline-flex items-center gap-2 bg-[#1d1d1f] hover:bg-black text-white text-[14px] font-medium px-5 py-3 rounded-full transition-colors"
+                >
+                  Email me <Send size={15} />
+                </a>
+                <p className="text-[12px] text-[#1d1d1f]/50">
+                  Or write directly to {profile.email}
+                </p>
+              </div>
             </Reveal>
           </div>
         </div>
@@ -259,21 +174,6 @@ const SocialPill = ({ href, icon, label }) => (
   >
     {icon} {label}
   </a>
-);
-
-const Field = ({ label, value, onChange, placeholder, type = "text" }) => (
-  <div>
-    <label className="text-[12px] uppercase tracking-[0.14em] text-[#1d1d1f]/55 font-medium">
-      {label}
-    </label>
-    <input
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className="mt-2 w-full rounded-2xl bg-white border border-black/10 px-4 py-3 text-[15px] text-[#1d1d1f] placeholder:text-[#1d1d1f]/35 focus:outline-none focus:border-[#0071e3]/40 focus:ring-4 focus:ring-[#0071e3]/10 transition-[border-color,box-shadow]"
-    />
-  </div>
 );
 
 export default ContactFooter;
