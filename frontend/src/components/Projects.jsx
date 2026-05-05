@@ -217,13 +217,19 @@ const ProjectCard = ({ project }) => {
           >
             {project.title}
           </h3>
-          <p
-            className={`mt-2 text-[14px] sm:text-[15px] leading-[1.55] ${
-              isDark ? "text-white/75" : "text-[#1d1d1f]/70"
-            } ${isLarge ? "max-w-md" : isWide ? "max-w-xl" : "max-w-xs"}`}
+          <div
+            className={`mt-2 pr-1 max-h-[140px] sm:max-h-none overflow-y-auto ${
+              isLarge ? "max-w-md" : isWide ? "max-w-xl" : "max-w-xs"
+            }`}
           >
-            {isLarge || isWide ? project.description : project.short}
-          </p>
+            <p
+              className={`text-[14px] sm:text-[15px] leading-[1.55] ${
+                isDark ? "text-white/75" : "text-[#1d1d1f]/70"
+              }`}
+            >
+              {isLarge || isWide ? project.description : project.short}
+            </p>
+          </div>
 
           {isLarge && (
             <ul className="mt-5 flex flex-wrap gap-2">
